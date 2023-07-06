@@ -42,13 +42,13 @@ x <- five_us$link[1] |> googleNgrams::gram_get_unzip()
 x |> dplyr::sample_n(5) |> knitr::kable()
 ```
 
-| V1                         |   V2 |  V3 |  V4 |  V5 |
-|:---------------------------|-----:|----:|----:|----:|
-| going to a picture show    | 1977 |   1 |   1 |   1 |
-| with one of the female     | 1990 |   2 |   2 |   2 |
-| and indeed the whole frame | 1818 |   1 |   1 |   1 |
-| ”                          | 1837 |   2 |   2 |   2 |
-| Fig . 237 . )              | 1954 |   1 |   1 |   1 |
+| V1                  |   V2 |  V3 |  V4 |  V5 |
+|:--------------------|-----:|----:|----:|----:|
+| “of Homer           | 1912 |   1 |   1 |   1 |
+| “as a foreign devil | 1918 |   1 |   1 |   1 |
+| “our country        | 1986 |   3 |   3 |   3 |
+| ”                   | 1903 |   3 |   3 |   3 |
+| a total dose of 2   | 2004 |   1 |   1 |   1 |
 
 ## Sample
 
@@ -85,5 +85,29 @@ x1 |> googleNgrams::gram_build_dtm() |> head() |> knitr::kable()
 | set out about nine in  | \[1808,1833) |    2 | nine    |        4 |
 | set out about nine in  | \[1808,1833) |    2 | in      |        5 |
 | persons may be said to | \[1933,1958) |    2 | persons |        1 |
+
+## Workflow
+
+``` r
+output_dir <- '/home/jtimm/Desktop/google-ngrams/'
+  
+for (i in 1:nrow(five_us)){
+  
+  x <- five_us$link[i] |> googleNgrams::gram_get_unzip()
+
+  x1 <- x |>
+    googleNgrams::gram_sample_ngram(start_date = 1808,
+                                    end_date = 2008,
+                                    generation = 25,
+                                    samp = 100000)   
+  
+  x2 <- x1 |> googleNgrams::gram_build_dtm()
+  
+  
+  
+  setwd(output_dir )
+  saveRDS(x2, paste0('g', i, '.rds'))
+}
+```
 
 ## Summary

@@ -73,4 +73,30 @@ x1 |> googleNgrams::gram_build_dtm() |> head() |> knitr::kable()
 
 
 
+## Workflow
+
+```{r eval=FALSE}
+output_dir <- '/home/jtimm/Desktop/google-ngrams/'
+  
+for (i in 1:nrow(five_us)){
+  
+  x <- five_us$link[i] |> googleNgrams::gram_get_unzip()
+
+  x1 <- x |>
+    googleNgrams::gram_sample_ngram(start_date = 1808,
+                                    end_date = 2008,
+                                    generation = 25,
+                                    samp = 100000)   
+  
+  x2 <- x1 |> googleNgrams::gram_build_dtm()
+  
+  
+  
+  setwd(output_dir )
+  saveRDS(x2, paste0('g', i, '.rds'))
+}
+```
+
+
+
 ## Summary
