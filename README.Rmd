@@ -1,0 +1,76 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+
+# googleNgrams
+
+Download and sample Google ngrams.
+
+
+```{r include=FALSE}
+library(tidyverse)
+```
+
+
+
+## Installation
+
+You can download the development version from GitHub with:
+
+```{r eval=FALSE}
+remotes::install_github("jaytimm/googleNgrams")
+```
+
+
+
+## Get ngram urls
+
+```{r}
+links <- googleNgrams::gram_get_links()
+five_us <- subset(links, ngram == '5gram' & language == 'eng-1M')
+links2020 <- googleNgrams::gram_get_links2020()
+links2020 |> head()
+```
+
+
+
+
+## Download, unzip
+
+```{r}
+## options(timeout = 500)
+x <- five_us$link[1] |> googleNgrams::gram_get_unzip()
+x |> dplyr::sample_n(5) |> knitr::kable()
+```
+
+
+
+
+
+## Sample
+
+```{r}
+x1 <- x |>
+  googleNgrams::gram_sample_ngram(start_date = 1808,
+                                  end_date = 2008, 
+                                  generation = 25,
+                                  samp = 100000)   
+
+x1 |> head() |> knitr::kable()
+```
+
+
+
+
+## As document-term
+
+```{r}
+x1 |> googleNgrams::gram_build_dtm() |> head() |> knitr::kable()
+```
+
+
+
+## Summary
